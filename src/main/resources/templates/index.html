@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Academic Literature System - Roster</title>
+    <!-- Thymeleaf template uses visual design styles from Editorial theme -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #FDFCFB; color: #1A1A1A; font-family: 'Georgia', serif; }
+        .editorial-border { border: 1px solid #1A1A1A !important; }
+        .block-shadow { box-shadow: 6px 6px 0px 0px rgba(0,0,0,1); }
+        .btn-editorial { background-color: #1A1A1A; color: #FFF; border-radius: 0; border: 1px solid #1A1A1A; }
+        .btn-editorial:hover { background-color: #FDFCFB; color: #1A1A1A; }
+    </style>
+</head>
+<body class="p-5">
+    <div class="container border-start border-end border-dark min-vh-100 p-5">
+        <!-- Header -->
+        <div class="row border-bottom border-dark pb-4 mb-5">
+            <div class="col-8">
+                <span class="text-uppercase tracking-widest text-muted small">Lab Assignment 02</span>
+                <h1 class="display-3 italic">Student Registry</h1>
+            </div>
+            <div class="col-4 text-end">
+                <a href="/books/search" class="btn btn-outline-dark rounded-0 px-4 py-2">Search External DB & Assign</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Left Panel: Student Registration Form -->
+            <div class="col-md-4 pe-5 border-end border-dark">
+                <h3 class="h4 mb-4">Register Student</h3>
+                <form th:action="@{/students/add}" th:object="${newStudent}" method="post">
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase small font-monospace">Full Name</label>
+                        <input type="text" class="form-control rounded-0 editorial-border" th:field="*{name}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase small font-monospace">Email</label>
+                        <input type="email" class="form-control rounded-0 editorial-border" th:field="*{email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-uppercase small font-monospace">Group Number</label>
+                        <input type="text" class="form-control rounded-0 editorial-border" th:field="*{groupNumber}" required>
+                    </div>
+                    <button type="submit" class="btn btn-editorial rounded-0 w-full text-uppercase small">Add Student Record</button>
+                </form>
+            </div>
+
+            <!-- Right Panel: Student List Grid -->
+            <div class="col-md-8 ps-5">
+                <h3 class="h4 mb-4">Academic Roster</h3>
+                <div class="table-responsive">
+                    <table class="table table-hover border border-dark align-middle">
+                        <thead class="table-dark">
+                            <tr>
+                                <th class="text-uppercase font-monospace small">ID</th>
+                                <th class="text-uppercase font-monospace small">Name</th>
+                                <th class="text-uppercase font-monospace small">Group</th>
+                                <th class="text-uppercase font-monospace small">Books</th>
+                                <th class="text-uppercase font-monospace small text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="student : ${students}">
+                                <td class="font-monospace" th:text="${student.id}">001</td>
+                                <td>
+                                    <a class="fw-bold text-dark text-decoration-none border-bottom border-dark" 
+                                       th:href="@{/students/profile/{id}(id=${student.id})}" th:text="${student.name}">Alexander</a>
+                                </td>
+                                <td th:text="${student.groupNumber}">GRP-101</td>
+                                <td>
+                                    <span class="badge bg-dark rounded-circle px-2 py-1" th:text="${student.bookCount}">0</span>
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group">
+                                        <a th:href="@{/students/profile/{id}(id=${student.id})}" class="btn btn-sm btn-outline-dark rounded-0">Profile</a>
+                                        <a th:href="@{/students/delete/{id}(id=${student.id})}" class="btn btn-sm btn-danger text-white rounded-0">Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
